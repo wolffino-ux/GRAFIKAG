@@ -186,7 +186,14 @@ function renderCalendar() {
     for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(year, month, i);
         const dayIndex = getDayIndex(date);
+const key = String(month+1).padStart(2,'0') + "-" + String(i).padStart(2,'0');
 
+if (holidays[key]) {
+    const el = document.createElement("div");
+    el.className = "event vacation";
+    el.innerText = holidays[key];
+    cell.appendChild(el);
+}
         const cell = document.createElement("div");
         cell.className = "day";
 
