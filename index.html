@@ -245,18 +245,7 @@ if (!hasAllDay) {
 
                 timeline.appendChild(block);
             });
-            block.onclick = function() {
-    if (!confirm("Usunąć?")) return;
-
-    saved[key] = saved[key].filter(e => e !== ev);
-
-    if (saved[key].length === 0) {
-        delete saved[key];
-    }
-
-    localStorage.setItem("events", JSON.stringify(saved));
-    renderCalendar();
-};
+           
         }
 
         const btn = document.createElement("button");
