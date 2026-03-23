@@ -202,38 +202,35 @@ function renderCalendar() {
         }
 
         const timeline = document.createElement("div");
-        timeline.className = "timeline";
+timeline.className = "timeline";
 
-        const key = `${year}-${month+1}-${i}`;
+const key = `${year}-${month+1}-${i}`;
 const hasAllDay = saved[key] && saved[key].some(ev => ev.type === "allday");
 
-if (!hasAllDay) {
-   const key = `${year}-${month+1}-${i}`;
-const hasAllDay = saved[key] && saved[key].some(ev => ev.type === "allday");
-
+// 🔹 PRACA (tylko jeśli brak allday)
 if (!hasAllDay) {
     const work = getWork(dayIndex);
     work.forEach(w => {
-            const [h1,m1,h2,m2,cls,name] = w;
+        const [h1,m1,h2,m2,cls,name] = w;
 
-            const block = document.createElement("div");
-            block.className = "block " + cls;
+        const block = document.createElement("div");
+        block.className = "block " + cls;
 
-            const top = timeToTop(h1,m1);
-            const bottom = timeToTop(h2,m2);
+        const top = timeToTop(h1,m1);
+        const bottom = timeToTop(h2,m2);
 
-            block.style.top = top + "%";
-            block.style.height = (bottom - top) + "%";
+        block.style.top = top + "%";
+        block.style.height = (bottom - top) + "%";
 
-            block.innerText =
-                `${h1.toString().padStart(2,'0')}:${m1.toString().padStart(2,'0')}–${h2.toString().padStart(2,'0')}:${m2.toString().padStart(2,'0')}\n${name}`;
+        block.innerText =
+            `${h1.toString().padStart(2,'0')}:${m1.toString().padStart(2,'0')}–${h2.toString().padStart(2,'0')}:${m2.toString().padStart(2,'0')}\n${name}`;
 
-            timeline.appendChild(block);
-        });
+        timeline.appendChild(block);
+    });
+}
 
-        // wydarzenia
-        const key = `${year}-${month+1}-${i}`;
-        if (saved[key]) {
+// 🔹 WYDARZENIA (zawsze)
+if (saved[key]) {
     saved[key].forEach(ev => {
 
         const block = document.createElement("div");
@@ -248,9 +245,9 @@ if (!hasAllDay) {
         block.innerText =
             `${ev.startH}:${ev.startM}–${ev.endH}:${ev.endM}\n${ev.text}`;
 
-        // ✅ TU DOPIERO klik działa poprawnie
+        // 🔥 USUWANIE
         block.onclick = function() {
-            if (!confirm("Usunąć?")) return;
+            if (!confirm("Usunąć: " + ev.text + "?")) return;
 
             saved[key] = saved[key].filter(e => e !== ev);
 
@@ -265,7 +262,7 @@ if (!hasAllDay) {
         timeline.appendChild(block);
     });
 }
-
+       
         const btn = document.createElement("button");
         btn.innerText = "+";
         btn.onclick = function() {
