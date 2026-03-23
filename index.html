@@ -230,7 +230,9 @@ if (holidays[key]) {
             timeline.appendChild(block);
         });
 
-        if (saved[i]) {
+       const key = year + "-" + (month+1) + "-" + i;
+
+if (saved[key]) {
             saved[i].forEach(ev => {
                 const block = document.createElement("div");
                 block.className = "block " + ev.type;
