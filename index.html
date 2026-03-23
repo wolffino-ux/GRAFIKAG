@@ -208,6 +208,10 @@ function renderCalendar() {
 const hasAllDay = saved[key] && saved[key].some(ev => ev.type === "allday");
 
 if (!hasAllDay) {
+   const key = `${year}-${month+1}-${i}`;
+const hasAllDay = saved[key] && saved[key].some(ev => ev.type === "allday");
+
+if (!hasAllDay) {
     const work = getWork(dayIndex);
     work.forEach(w => {
             const [h1,m1,h2,m2,cls,name] = w;
@@ -245,6 +249,18 @@ if (!hasAllDay) {
 
                 timeline.appendChild(block);
             });
+            block.onclick = function() {
+    if (!confirm("Usunąć?")) return;
+
+    saved[key] = saved[key].filter(e => e !== ev);
+
+    if (saved[key].length === 0) {
+        delete saved[key];
+    }
+
+    localStorage.setItem("events", JSON.stringify(saved));
+    renderCalendar();
+};
            
         }
 
