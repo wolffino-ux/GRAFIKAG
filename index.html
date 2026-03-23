@@ -79,6 +79,13 @@ h1 {
     white-space: pre-line;
     line-height: 1.1;
 }
+    .holiday {
+    background: #ff3b30;
+    font-size: 10px;
+    margin-top: 2px;
+    padding: 2px;
+    border-radius: 4px;
+}
 
 .strusia { background: #2ecc71; }
 .medicover { background: #3498db; }
@@ -247,7 +254,11 @@ if (holidays[key]) {
             const text = prompt("Co?");
             const start = prompt("Od (np 16:00)");
             const end = prompt("Do (np 18:00)");
-            const type = prompt("Typ: custom / vacation");
+            const type = prompt("Typ: custom / vacation / allday");
+            if (type === "allday") {
+    sh = 8; sm = 0;
+    eh = 20; em = 0;
+}
 
             if (!text || !start || !end) return;
 
