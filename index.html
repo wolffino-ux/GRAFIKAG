@@ -234,35 +234,37 @@ if (!hasAllDay) {
         // wydarzenia
         const key = `${year}-${month+1}-${i}`;
         if (saved[key]) {
-            saved[key].forEach(ev => {
-                const block = document.createElement("div");
-                block.className = "block " + ev.type;
+    saved[key].forEach(ev => {
 
-                const top = timeToTop(ev.startH, ev.startM);
-                const bottom = timeToTop(ev.endH, ev.endM);
+        const block = document.createElement("div");
+        block.className = "block " + ev.type;
 
-                block.style.top = top + "%";
-                block.style.height = (bottom - top) + "%";
+        const top = timeToTop(ev.startH, ev.startM);
+        const bottom = timeToTop(ev.endH, ev.endM);
 
-                block.innerText =
-                    `${ev.startH}:${ev.startM}–${ev.endH}:${ev.endM}\n${ev.text}`;
+        block.style.top = top + "%";
+        block.style.height = (bottom - top) + "%";
 
-                timeline.appendChild(block);
-            });
-            block.onclick = function() {
-    if (!confirm("Usunąć?")) return;
+        block.innerText =
+            `${ev.startH}:${ev.startM}–${ev.endH}:${ev.endM}\n${ev.text}`;
 
-    saved[key] = saved[key].filter(e => e !== ev);
+        // ✅ TU DOPIERO klik działa poprawnie
+        block.onclick = function() {
+            if (!confirm("Usunąć?")) return;
 
-    if (saved[key].length === 0) {
-        delete saved[key];
-    }
+            saved[key] = saved[key].filter(e => e !== ev);
 
-    localStorage.setItem("events", JSON.stringify(saved));
-    renderCalendar();
-};
-           
-        }
+            if (saved[key].length === 0) {
+                delete saved[key];
+            }
+
+            localStorage.setItem("events", JSON.stringify(saved));
+            renderCalendar();
+        };
+
+        timeline.appendChild(block);
+    });
+}
 
         const btn = document.createElement("button");
         btn.innerText = "+";
