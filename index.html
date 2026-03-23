@@ -14,9 +14,7 @@ body {
     padding: 10px;
 }
 
-h1 {
-    text-align: center;
-}
+h1 { text-align: center; }
 
 .nav {
     display: flex;
@@ -57,9 +55,7 @@ h1 {
     height: 140px;
 }
 
-.date {
-    font-size: 12px;
-}
+.date { font-size: 12px; }
 
 .timeline {
     position: relative;
@@ -79,7 +75,8 @@ h1 {
     white-space: pre-line;
     line-height: 1.1;
 }
-    .holiday {
+
+.holiday {
     background: #ff3b30;
     font-size: 10px;
     margin-top: 2px;
@@ -122,7 +119,8 @@ button {
 
 <script>
 const calendar = document.getElementById("calendar");
-    const holidays = {
+
+const holidays = {
     "01-01": "Nowy Rok",
     "01-06": "Trzech Króli",
     "05-01": "Święto Pracy",
@@ -137,9 +135,7 @@ const calendar = document.getElementById("calendar");
 let saved = {};
 try {
     saved = JSON.parse(localStorage.getItem("events") || "{}");
-} catch(e) {
-    saved = {};
-}
+} catch(e) {}
 
 let currentDate = new Date();
 
@@ -172,20 +168,14 @@ function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
-    const label = document.getElementById("monthLabel");
-    if (label) {
-        label.innerText = currentDate.toLocaleString("pl-PL", {
-            month: "long",
-            year: "numeric"
-        });
-    }
+    document.getElementById("monthLabel").innerText =
+        currentDate.toLocaleString("pl-PL", { month: "long", year: "numeric" });
 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     const firstDay = new Date(year, month, 1);
     const startIndex = getDayIndex(firstDay);
 
-    // puste pola
     for (let i = 0; i < startIndex; i++) {
         calendar.appendChild(document.createElement("div"));
     }
@@ -193,20 +183,23 @@ function renderCalendar() {
     for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(year, month, i);
         const dayIndex = getDayIndex(date);
-const key = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
 
-if (holidays[key]) {
-    const el = document.createElement("div");
-    el.className = "event vacation";
-    el.innerText = holidays[key];
-    cell.appendChild(el);
-}
         const cell = document.createElement("div");
         cell.className = "day";
 
         const dateEl = document.createElement("div");
         dateEl.className = "date";
         dateEl.innerText = i;
+        cell.appendChild(dateEl);
+
+        // święta
+        const hKey = `${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+        if (holidays[hKey]) {
+            const el = document.createElement("div");
+            el.className = "holiday";
+            el.innerText = holidays[hKey];
+            cell.appendChild(el);
+        }
 
         const timeline = document.createElement("div");
         timeline.className = "timeline";
@@ -230,10 +223,10 @@ if (holidays[key]) {
             timeline.appendChild(block);
         });
 
-       const key = year + "-" + (month+1) + "-" + i;
-
-if (saved[key]) {
-            saved[i].forEach(ev => {
+        // wydarzenia
+        const key = `${year}-${month+1}-${i}`;
+        if (saved[key]) {
+            saved[key].forEach(ev => {
                 const block = document.createElement("div");
                 block.className = "block " + ev.type;
 
@@ -257,28 +250,31 @@ if (saved[key]) {
             const start = prompt("Od (np 16:00)");
             const end = prompt("Do (np 18:00)");
             const type = prompt("Typ: custom / vacation / allday");
+
+            if (!text) return;
+
+            let sh, sm, eh, em;
+
             if (type === "allday") {
-    sh = 8; sm = 0;
-    eh = 20; em = 0;
-}
+                sh = 8; sm = 0;
+                eh = 20; em = 0;
+            } else {
+                if (!start || !end) return;
+                sh = parseInt(start.split(":")[0]);
+                sm = parseInt(start.split(":")[1]);
+                eh = parseInt(end.split(":")[0]);
+                em = parseInt(end.split(":")[1]);
+            }
 
-            if (!text || !start || !end) return;
+            const key = `${year}-${month+1}-${i}`;
 
-            const sh = parseInt(start.split(":")[0]);
-            const sm = parseInt(start.split(":")[1]);
-            const eh = parseInt(end.split(":")[0]);
-            const em = parseInt(end.split(":")[1]);
-
-            const key = year + "-" + (month+1) + "-" + i;
-
-if (!saved[key]) saved[key] = [];
-saved[key].push({text, startH:sh, startM:sm, endH:eh, endM:em, type});
+            if (!saved[key]) saved[key] = [];
+            saved[key].push({text, startH:sh, startM:sm, endH:eh, endM:em, type});
 
             localStorage.setItem("events", JSON.stringify(saved));
             renderCalendar();
         };
 
-        cell.appendChild(dateEl);
         cell.appendChild(timeline);
         cell.appendChild(btn);
 
