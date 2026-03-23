@@ -267,8 +267,10 @@ if (holidays[key]) {
             const eh = parseInt(end.split(":")[0]);
             const em = parseInt(end.split(":")[1]);
 
-            if (!saved[i]) saved[i] = [];
-            saved[i].push({text, startH:sh, startM:sm, endH:eh, endM:em, type});
+            const key = year + "-" + (month+1) + "-" + i;
+
+if (!saved[key]) saved[key] = [];
+saved[key].push({text, startH:sh, startM:sm, endH:eh, endM:em, type});
 
             localStorage.setItem("events", JSON.stringify(saved));
             renderCalendar();
